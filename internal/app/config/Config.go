@@ -1,13 +1,16 @@
 package config
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 type Config struct {
 	HTTPAddr   string
 	NasaAPIKey string
 }
 
-func Read() (Config, error) {
+func Read() (*Config, error) {
 	var config Config
 	httpAddr, exists := os.LookupEnv("HTTP_ADDR")
 	if exists {
@@ -18,6 +21,8 @@ func Read() (Config, error) {
 	nasaAPIKey, exists := os.LookupEnv("NASA_API_KEY")
 	if exists {
 		config.NasaAPIKey = nasaAPIKey
+	} else {
+		return nil, fmt.Errorf("NASA_API_KEY environment variable not set")
 	}
-	return config, nil
+	return &config, nil
 }
