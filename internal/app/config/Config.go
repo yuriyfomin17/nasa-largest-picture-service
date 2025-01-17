@@ -8,6 +8,7 @@ import (
 type Config struct {
 	HTTPAddr   string
 	NasaAPIKey string
+	DSN        string
 }
 
 func Read() (*Config, error) {
@@ -23,6 +24,13 @@ func Read() (*Config, error) {
 		config.NasaAPIKey = nasaAPIKey
 	} else {
 		return nil, fmt.Errorf("NASA_API_KEY environment variable not set")
+	}
+
+	dsn, exists := os.LookupEnv("DSN")
+	if exists {
+		config.DSN = dsn
+	} else {
+		config.DSN = "postgresql://postgres:postgres@localhost:5433/postgres?sslmode=disable"
 	}
 	return &config, nil
 }

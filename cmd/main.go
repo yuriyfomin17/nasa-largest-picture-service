@@ -36,11 +36,11 @@ func run() error {
 
 	client := nasa.NewClient(cfg.NasaAPIKey)
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "host=localhost user=postgres password=mysecretpassword port=5432 dbname=postgres sslmode=disable",
+		DSN:                  cfg.DSN,
 		PreferSimpleProtocol: true,
 	}))
 	if err != nil {
-		return fmt.Errorf("failde to connect to NASA API: %w", err)
+		return fmt.Errorf("failed to connect to database: %w", err)
 	}
 	err = db.AutoMigrate(&repository.Image{})
 	if err != nil {
